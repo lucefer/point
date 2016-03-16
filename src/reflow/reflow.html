@@ -82,12 +82,13 @@
         ],
         forceReflowStyle = ['width', 'height'],
         func = getComputedStyle,
-        forceReflowFun = [func],
+        
+        forceReflowFun = [func,document.body.getBoundingClientRect],
         obj = {
             forceReflowAttr: forceReflowAttr,
             forceReflowStyle: forceReflowStyle,
             forceReflowFun: forceReflowFun
-        };
+        }
 
     ! function() {
         var container = document.querySelector("#reflowCol");
@@ -95,14 +96,14 @@
         for (var key in obj) {
             obj[key].forEach(function(s) {
                 var input = document.createElement('input'),
-                label = document.createElement('label');
-                input.type = 'checkbox'
-                input.dataset.type = key;
-                input.dataset.value = s;
+                label = document.createElement('label')
 
-                label.textContent = key == 'forceReflowFun' ? 'getComputedStyle' : s
-                domStr.appendChild(input);
-                domStr.appendChild(label);
+                input.type = 'checkbox'
+                input.dataset.type = key
+                input.dataset.value = key=='forceReflowFun'?s.name:s
+                label.textContent = key == 'forceReflowFun' ? s.name : s
+                domStr.appendChild(input)
+                domStr.appendChild(label)
             })
 
         }
@@ -117,14 +118,18 @@
             target.style.left = "50%";
             switch (attr.type) {
                 case 'forceReflowAttr':
-                    target[attr.value]; //强制reflow
+                    target[attr.value] //强制reflow
                     break;
                 case 'forceReflowStyle':
-                    target.style[attr.value]; //不会强制reflow
+                    target.style[attr.value] //不会强制reflow
                     break;
                 case 'forceReflowFun':
-                    var style = getComputedStyle(target); //单单执行这一句,不会强制reflow
-                    style.marginTop //配合读取样式（并不是所有），会强制reflow，个别样式是无法强制reflow的，如transition
+                    if(attr.value=='getComputedStyle'){
+                        var style = window[attr.value](target) //单单执行这一句,不会强制reflow
+                        style.width //配合读取样式（并不是所有），会强制reflow，个别样式是无法强制reflow的，如transition
+                    }else{console.log(typeof attr.value)
+                        var rect=document.body[attr.value].call(target)//执行该方法，强制reflow
+                    }
                     break;
             }
             target.style.left = (window.innerWidth - 80) + "px"
