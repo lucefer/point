@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
-    <title>演示强制回流</title>
+    <title>强制回流演示</title>
     <style type="text/css">
     html {
         background-color: #000;
@@ -51,6 +51,16 @@
         background-color: white;
         z-index: 10;
     }
+    .text{
+        position: fixed;
+        bottom: 0;
+        padding:10px;
+        background-color: #FFF;
+        left:0;
+        width: 100%;
+        line-height: 1.5;
+        font-size: 14px;
+    }
     </style>
 </head>
 
@@ -59,6 +69,13 @@
     <div id="reflowCol">
     </div>
     <div class="target" id="target"></div>
+    <div class="text">
+        触发强制回流的视觉效果：
+        绿色方块在白色分界线处开始运动。
+        <br/>
+        未触发强制回流的视觉效果：
+        绿色方块在起始点开始运动。
+    </div>
     <script>
     var forceReflowAttr = ['offsetWidth', 'offsetHeight', 'offsetLeft', 'offsetTop',
             'scrollTop', 'scrollLeft', 'scrollWidth', 'scrollHeight'
