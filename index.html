@@ -81,9 +81,7 @@
             'scrollTop', 'scrollLeft', 'scrollWidth', 'scrollHeight'
         ],
         forceReflowStyle = ['width', 'height'],
-        func = getComputedStyle,
-        
-        forceReflowFun = [func,document.body.getBoundingClientRect],
+        forceReflowFun = [getComputedStyle,document.body.getBoundingClientRect],
         obj = {
             forceReflowAttr: forceReflowAttr,
             forceReflowStyle: forceReflowStyle,
