@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>演示强制回流</title>
+    <style type="text/css">
+    html {
+        background-color: #000;
+    }
+    
+    html,
+    body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+    }
+    
+    .target {
+        position: relative;
+        left: 0;
+        margin: 30px 0 0 10px;
+        width: 50px;
+        height: 50px;
+        background-color: greenyellow;
+        opacity: .5;
+        z-index: 90;
+    }
+    
+    #reflowCol {
+        padding: 10px;
+        position: relative;
+        z-index: 100;
+        overflow: hidden;
+        background-color: #DDD
+    }
+    
+    label {
+        margin-right: 10px;
+        line-height: 30px;
+    }
+    
+    .markLine {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1px;
+        height: 100%;
+        transform: translate3d(-50%, -50%, 0);
+        background-color: white;
+        z-index: 10;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="markLine"></div>
+    <div id="reflowCol">
+    </div>
+    <div class="target" id="target"></div>
+    <script>
+    var forceReflowAttr = ['offsetWidth', 'offsetHeight', 'offsetLeft', 'offsetTop',
+            'scrollTop', 'scrollLeft', 'scrollWidth', 'scrollHeight'
+        ],
+        forceReflowStyle = ['width', 'height'],
+        func = getComputedStyle,
+        forceReflowFun = [func],
+        obj = {
+            forceReflowAttr: forceReflowAttr,
+            forceReflowStyle: forceReflowStyle,
+            forceReflowFun: forceReflowFun
+        };
+
+    ! function() {
+        var container = document.querySelector("#reflowCol");
+        var domStr = document.createDocumentFragment('div');
+        for (var key in obj) {
+            obj[key].forEach(function(s) {
+                var input = document.createElement('input')，
+                label = document.createElement('label');
+                input.type = 'checkbox'
+                input.dataset.type = key;
+                input.dataset.value = s;
+
+                label.textContent = key == 'forceReflowFun' ? 'getComputedStyle' : s
+                domStr.appendChild(input);
+                domStr.appendChild(label);
+            })
+
+        }
+        container.appendChild(domStr)
+    }()
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var target = document.querySelector("#target")
+        var inputs = document.querySelectorAll("input[type='checkbox']");
+
+        function cb(attr) {
+            target.style.left = "50%";
+            switch (attr.type) {
+                case 'forceReflowAttr':
+                    target[attr.value]; //强制reflow
+                    break;
+                case 'forceReflowStyle':
+                    target.style[attr.value]; //不会强制reflow
+                    break;
+                case 'forceReflowFun':
+                    var style = getComputedStyle(target); //单单执行这一句,不会强制reflow
+                    style.marginTop //配合读取样式（并不是所有），会强制reflow，个别样式是无法强制reflow的，如transition
+                    break;
+            }
+            target.style.left = (window.innerWidth - 80) + "px"
+            target.style.transition = "left 3s cubic-bezier(0,0,1,1)";
+        }
+        var currCheck = null;
+        Array.prototype.forEach.call(inputs, function(i) {
+            i.addEventListener("click", function refresh() {
+                if (!i.checked) {
+                    target.style.left = "0";
+                    target.style.transition = '';
+                    currCheck = null;
+                } else {
+                    if (currCheck && currCheck != i) {
+                        currCheck.checked = false;
+                    }
+                    cb(i.dataset);
+                    currCheck = i;
+                }
+            })
+        })
+    })
+    </script>
+</body>
+
+</html>

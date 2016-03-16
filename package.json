@@ -1,0 +1,14 @@
+{
+  "name": "point",
+  "version": "1.0.0",
+  "description": "重要知识点",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "js，css，html"
+  ],
+  "author": "lucefer",
+  "license": "ISC"
+}
