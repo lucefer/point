@@ -16,3 +16,5 @@ var style=getComputedStyle/currentStyle
 ####样式：
 通过dom.style.XX进行读取样式，是不会触发强制回流的。
 本例仅仅通过width和height进行了验证。
+
+点击查看[示例](http://lucefer.github.io/slider)
