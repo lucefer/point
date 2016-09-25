@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>物料智能统计</title>
+	<meta charset="utf-8">
+    <title>Flat UI - Free Bootstrap Framework and Theme</title>
+    <meta name="description" content="Flat UI Kit Free is a Twitter Bootstrap Framework design and Theme, this responsive framework includes a PSD and HTML version."/>
+
+    <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="dist/css/flat-ui.css" rel="stylesheet">
+    <link href="docs/assets/css/demo.css" rel="stylesheet">
+<link href="dist/index.css" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="dist/js/vendor/html5shiv.js"></script>
+      <script src="dist/js/vendor/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+ <div class="container">
+		
+		<nav class="navbar navbar-inverse navbar-embossed" role="navigation">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+                <span class="sr-only">Toggle navigation</span>
+              </button>
+              <a class="navbar-brand" href="#">春节志伟物料统计</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-01">
+              <ul class="nav navbar-nav navbar-left">
+                <li><a href="#fakelink">未来功能<span class="navbar-unread">未来功能1</span></a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">未来功能 <b class="caret"></b></a>
+                  <span class="dropdown-arrow"></span>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                  </ul>
+                </li>
+                <li><a href="#fakelink">未来功能</a></li>
+               </ul>
+               <form class="navbar-form navbar-right" action="#" role="search">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input class="form-control" id="navbarInput-01" placeholder="Search" type="search">
+                    <span class="input-group-btn">
+                      <button type="submit" class="btn"><span class="fui-search"></span></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </div><!-- /.navbar-collapse -->
+          </nav>
+      <div class="row">
+       <div class="col-xs-12">
+          <h3 class="demo-panel-title">统计尺寸输入</h3>
+          <div class="tagsinput-primary">
+            <input name="tagsinput" class="tagsinput" placeholder="请输入统计数字" data-role="tagsinput" value="" />
+          </div>
+        </div> <!-- /.col-xs-6 -->
+        </div>
+        <div class="row demo-row">
+        
+        <div class="col-xs-3">
+          <a href="javascript:;" class="btn btn-block btn-lg btn-inverse" onclick="dealArray()">统计</a>
+        </div>
+       
+      </div> <!-- /row -->
+       <div id="p-con">
+      
+		 </div>
+		<div class="footer"></div>
+		</div>
+		<script>
+		var colorArr=["#EC7063","#5DADE2","#F4D313"]
+		  function sort(arr){
+		  	Array.sort(arr,function(a1,a2){
+		  		return a1>a2?1:-1;
+		  	})
+		  }
+		  var array=[1000,2000,1500,1230,5300,4520,1000,2200];
+		  var out=[];
+		  sort(array);
+		  function dealArray(){
+		  	var info="第";
+		  	var dealArray=[];
+		  	var   type="^[0-9]*[1-9][0-9]*$";
+            var   re   =   new   RegExp(type); 
+		  	$(".tag.label.label-info").each(function(i,num){
+		  		var txt=$(num).text();
+		  		txt=txt.replace(/\s/g,"");
+		  		if(txt.match(re)==null){
+		  			info+=(i+1)+",";
+		  		}
+		  		else{
+		  			dealArray.push(parseInt(txt));
+		  		}
+		  	})
+		  	if(info!="第"){
+		  		alert(info.substring(0,info.length-1)+"个尺寸不是数字，请输入合法数字");
+		  		return;
+		  	}
+		  	array=dealArray;
+		  	sort(array);
+		  	cal();
+		  	draw();
+		  }
+function draw(){
+	var str="";
+	for(var i=0;i<out.length;i++){
+		var a=out[i].split('|');
+		var sing= '<div class="progress">';
+		var inner="";
+var lastBc=0;
+		for(var j=0,count=a.length;j<count;j++)
+				{
+                   var curr=parseInt(a[j]);
+                   
+                   lastBc=lastBc>2?0:lastBc;
+
+                   var bg=colorArr[lastBc];lastBc++;
+                  	if(curr>6000){
+                  		 inner+='<div class="progress-bar" style="width: 100%;background-color:'+bg+'">'+curr+'</div>';
+                  	}
+                  	else{
+                  		var per=(curr/6000*100).toFixed(2);
+                  		//alert(per);
+                   inner+='<div class="progress-bar" style="width: '+per+'%;background-color:'+bg+'">'+curr+'</div>';
+               }
+				}
+				sing=sing+inner+"</div>";
+				str+=sing;
+			}
+$("#p-con").html(str);
+}
+		  function cal(){
+		  	var max=array[array.length-1];//取出数组中最大的一个数字
+		  	var min=array[0];//取出数组中最小的一个数字
+		  	var tmp=[];//创建一个临时数组
+		  	var tmpSum=0;
+		  	var minIndex=0;
+		  	var over=false;
+		  	out=[];
+		  	for(var i=array.length-1;i>=0;i--){//遍历数组
+		  		if(minIndex>=i){
+
+		  					break;
+		  					}
+		  		
+		  		if(array[i]>6000){//如果当前数字大于6米，将它放入最终数组
+		  			out.push(array[i]+"");//
+		  		}
+		  		else{//如果当前数字不大于6米
+		  			
+		  				var curr=array[i];
+		  				var leiji=false;
+		  				tmp.push(curr);
+		  				tmpSum=curr;
+		  				while(true){
+		  					var bijiao=0;
+		  					if(minIndex>=i){
+		  						out.push(tmp.join("|"));
+		  					break;
+		  					}
+		  					if(!leiji){
+		  						bijiao=curr;
+		  					}
+		  					else{
+		  						bijiao=tmpSum
+		  					}
+
+		  			if((bijiao+min)>6000){
+		  				out.push(tmp.join("|"));
+		  				tmp=[];
+		  				leiji=false;
+		  				break;
+		  			}
+		  			else{
+		  				//if(!leiji){
+		  					
+		  				tmp.push(min);
+		  			//}
+		  				tmpSum+=min;
+		  				leiji=true;
+		  				minIndex++;
+		  				if(minIndex<i){
+		  					min=parseInt(array[minIndex]+"");
+		  				}
+		  				
+		  				
+		  			}
+		  			}
+		  			
+		  		
+		  			
+		  		}
+		  		
+		  		}
+		  	}
+		  
+		  cal();
+		  function callback(arr){
+		  	for(var i=0,count=arr.length;i<arr.length;i++){
+
+		  	}
+		  }
+		  	console.log(out);
+		 //alert(out)
+		</script>
+		 <script src="dist/js/vendor/jquery.min.js"></script>
+    <script src="dist/js/vendor/video.js"></script>
+    <script src="dist/js/flat-ui.min.js"></script>
+    <script src="docs/assets/js/application.js"></script>
+</body>
+</html>

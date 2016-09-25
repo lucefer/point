@@ -1,0 +1,14 @@
+html,body,div{
+	margin: 0;
+	padding: 0;
+}
+.header{
+	width: 100%;
+	height: 60px;
+	background-color: #FE5351;
+	color: #FFF;
+}
+.logo{
+	line-height: 60px;
+	margin-left: 30px;
+}
